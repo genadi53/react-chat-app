@@ -1,16 +1,19 @@
-import { useState } from "react";
+// import { useState } from "react";
 import Login from "./components/Login";
 import "./App.css";
 import useLocalStorage from "./hooks/useLocalStorage";
 import Dashboard from "./components/Dashboard";
 import { ContactProvider } from "./contexts/ContactContext";
+import { ConversaionProvider } from "./contexts/ConversationContext";
 
 function App() {
   const [id, setId] = useLocalStorage();
 
   const dashboard = (
     <ContactProvider>
-      <Dashboard id={id} />
+      <ConversaionProvider>
+        <Dashboard id={id} />
+      </ConversaionProvider>
     </ContactProvider>
   );
 

@@ -11,7 +11,7 @@ export default function ContactModal({ hideModal }) {
     e.preventDefault();
 
     // console.log(idRef.current.value, nameRef.current.value);
-    // createContact(idRef.current.value, nameRef.current.value);
+    createContact(idRef.current.value, nameRef.current.value);
     hideModal();
   };
 
