@@ -23,7 +23,7 @@ export default function Login({ setId }) {
       <Form onSubmit={handleSubmit} className="w-100">
         <Form.Group className="my-2">
           <Form.Label>Enter Your Id</Form.Label>
-          <Form.Control type="text" ref={idRef} required />
+          <Form.Control type="text" idRef={idRef} required />
         </Form.Group>
         <Button type="submit" className="me-2">
           Login

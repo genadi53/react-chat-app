@@ -24,7 +24,7 @@ export default function OpenConversation() {
       <div className="flex-grow-1 overflow-auto">
         <div
           className=" d-flex 
-        flex-column align-items-start justify-content-end px-3"
+        flex-column align-items-start justify-content-end px-3 mt-2"
         >
           {selectedConversation.messages.map((message, idx) => {
             return (
@@ -32,7 +32,9 @@ export default function OpenConversation() {
                 ref={lastMessage ? setRef : null}
                 key={idx}
                 className={`ms-1 d-flex flex-column ${
-                  message.fromMe ? "align-self-end" : ""
+                  message.fromMe
+                    ? "align-self-end align-items-end "
+                    : " align-items-start"
                 }`}
               >
                 <div
@@ -64,7 +66,9 @@ export default function OpenConversation() {
               required
             />
             <InputGroup.Append>
-              <Button type="submit">Send</Button>
+              <Button type="submit" className="h-100 ms-1">
+                Send
+              </Button>
             </InputGroup.Append>
           </InputGroup>
         </Form.Group>

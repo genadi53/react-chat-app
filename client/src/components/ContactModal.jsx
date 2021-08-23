@@ -22,11 +22,11 @@ export default function ContactModal({ hideModal }) {
         <Form onSubmit={handleSubmit}>
           <Form.Group>
             <Form.Label>ID</Form.Label>
-            <Form.Control type="text" ref={idRef} required></Form.Control>
+            <Form.Control type="text" idRef={idRef} required></Form.Control>
           </Form.Group>
           <Form.Group>
             <Form.Label>Name</Form.Label>
-            <Form.Control type="text" ref={nameRef} required></Form.Control>
+            <Form.Control type="text" nameRef={nameRef} required></Form.Control>
           </Form.Group>
           <Button type="submit" className="my-2">
             Create Contact
