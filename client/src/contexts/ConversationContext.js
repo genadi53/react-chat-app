@@ -1,13 +1,15 @@
 import React, { useContext, useState } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useContacts } from "./ContactContext";
+// import { arrayEquals } from "../utils/arrayEquals";
+
 const ConversaionContext = React.createContext();
 
 export function useConversaions() {
   return useContext(ConversaionContext);
 }
 
-export function ConversaionProvider({ children }) {
+export function ConversaionProvider({ id, children }) {
   const [conversations, setConversations] = useLocalStorage(
     "conversations",
     []
@@ -21,6 +23,43 @@ export function ConversaionProvider({ children }) {
     });
   }
 
+  const addMessageToConversations = ({ recipients, text, sender }) => {
+    setConversations((prevConversations) => {
+      let madeChanges = false;
+      const newMessage = { sender, text };
+
+      console.log(prevConversations);
+      const newConversation = prevConversations.map((conversation) => {
+        // console.log(conversation.recipients);
+        // console.log(recipients);
+        const areEqual = arrayEquality(conversation.recipients, recipients);
+        // console.log(areEqual);
+        if (areEqual) {
+          madeChanges = true;
+          return {
+            ...conversation,
+            messages: [...conversation.messages, newMessage],
+          };
+        }
+        return conversation;
+      });
+
+      if (madeChanges) {
+        return newConversation;
+      } else {
+        return [...prevConversations, { recipients, messages: [newMessage] }];
+      }
+    });
+  };
+
+  const sendMessage = (recipients, text) => {
+    addMessageToConversations({
+      recipients,
+      text,
+      sender: id,
+    });
+  };
+
   const formattedConversations = conversations.map((conversation, idx) => {
     const recipients = conversation.recipients.map((recipient) => {
       const contact = contacts.find((contact) => {
@@ -30,25 +69,23 @@ export function ConversaionProvider({ children }) {
       return { id: recipient, name };
     });
 
+    const messages = conversation.messages.map((message) => {
+      const contact = contacts.find((contact) => {
+        return contact.id === message.sender;
+      });
+      const name = (contact && contact.name) || message.sender;
+      const fromMe = id === message.sender;
+      return { ...message, senderName: name, fromMe };
+    });
+
     const selected = idx === selectedConversationIndex;
-    return { ...conversation, recipients, selected };
-
-    // const messages = conversation.messages.map((message) => {
-    //   const contact = contacts.find((contact) => {
-    //     return contact.id === message.sender;
-    //   });
-    //   const name = (contact && contact.name) || message.sender;
-    //   const fromMe = id === message.sender;
-    //   return { ...message, senderName: name, fromMe };
-    // });
-
-    // const selected = index === selectedConversationIndex;
-    // return { ...conversation, messages, recipients, selected };
+    return { ...conversation, recipients, messages, selected };
   });
 
   const value = {
     conversations: formattedConversations,
     createConversation,
+    sendMessage,
     selectedConversation: formattedConversations[selectedConversationIndex],
     selectConversationIndex: setSelectedConversationIndex,
   };
@@ -58,4 +95,15 @@ export function ConversaionProvider({ children }) {
       {children}
     </ConversaionContext.Provider>
   );
+}
+
+function arrayEquality(a, b) {
+  if (a.length !== b.length) return false;
+
+  a.sort();
+  b.sort();
+
+  return a.every((element, index) => {
+    return element === b[index];
+  });
 }
