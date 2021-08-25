@@ -1,5 +1,9 @@
 # React Chat Application
 
+## Description
+
+Chatting application build to look like Facebook's Messenger, using Socket.io for communication between different clients.
+
 ## Built With
 
 - [React](https://reactjs.org/)
